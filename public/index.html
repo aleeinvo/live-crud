@@ -1,0 +1,37 @@
+<html>
+
+<head>
+  <title>Express</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <link rel="stylesheet" href="stylesheets/bootstrap.css">
+  <script src="https://unpkg.com/vue@3" defer></script>
+  <script src="/socket.io/socket.io.js" defer></script>
+  <script src="./javascripts/app.js" defer></script>
+</head>
+
+<body>
+  <div class="container" id="app">
+    <h1 class="display-1">
+      {{ appName }}
+    </h1>
+
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="list-group">
+          <li class="list-group-item" v-for="(message, index) in messages" :key="index">{{ message }}</li>
+        </ul>
+      </div>
+    </div>
+    <div class="row mt-5">
+      <div class="col-md-12">
+        <div class="mb-3">
+          <input class="form-control" type="text" v-model="message">
+        </div>
+
+        <button class="btn btn-success" @click="send" @keyup.enter="send">Send</button>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
