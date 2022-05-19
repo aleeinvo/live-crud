@@ -16,19 +16,31 @@
     </h1>
 
     <div class="row">
-      <div class="col-md-12">
-        <ul class="list-group">
-          <li class="list-group-item" v-for="(message, index) in messages" :key="index">{{ message }}</li>
-        </ul>
+      <div class="col-md-4" v-for="post in posts" :key="post.id">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ post.title }}</h5>
+            <p class="card-text">{{  post.body }}</p>
+            <button @click="edit(post.id)" class="btn btn-primary">Edit</button>
+            <button class="btn btn-danger" @click="destory(post.id)">Delete</button>
+          </div>
+        </div>
       </div>
     </div>
     <div class="row mt-5">
       <div class="col-md-12">
-        <div class="mb-3">
-          <input class="form-control" type="text" v-model="message">
-        </div>
-
-        <button class="btn btn-success" @click="send" @keyup.enter="send">Send</button>
+        <form @submit.prevent="doIt">
+          <div class="mb-3">
+            <label for="title" class="form-label">Post Title</label>
+            <input type="text" class="form-control" id="title" v-model="post.title" required>
+          </div>
+          <div class="mb-3">
+            <label for="body" class="form-label">Post Body</label>
+            <textarea class="form-control" id="body" rows="3" v-model="post.body" required></textarea>
+          </div>
+  
+          <button class="btn btn-success" type="submit">{{ post.action }}</button>
+        </form>
       </div>
     </div>
   </div>

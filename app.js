@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var http = require('http');
 const { Server } = require('socket.io');
+const postSocket = require('./scokets/post');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -42,11 +43,34 @@ var server = http.createServer(app);
 const io = new Server(server);
 
 io.on('connection', (socket) => {
-  console.log('a user connected');
+  console.log('Socket connection established');
+
+  async function emitPostsIndex() {
+    const posts = await postSocket.index();
+    io.emit('posts:index', posts);
+  }
+
+  emitPostsIndex();
 
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
+
+  socket.on('posts:create', async post => {
+    console.log('Recivied post', post);
+    await postSocket.create(post);
+    emitPostsIndex();
+  });
+
+  socket.on('posts:update', async postData => {
+    await postSocket.update(postData);
+    emitPostsIndex();
+  });
+
+  socket.on('posts:destroy', async postId => {
+    await postSocket.destroy(postId);
+    emitPostsIndex();
+  })
 
   socket.on('message:new', message => {
     console.log('received message: ', message);
